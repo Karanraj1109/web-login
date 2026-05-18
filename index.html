@@ -1,1 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Login</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1e1e2f, #2a2a4a);
+            color: #fff;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .container.dashboard {
+            max-width: 600px;
+        }
+
+        h2 {
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #b3b3b3;
+            margin-bottom: 25px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input::placeholder {
+            color: #bbb;
+        }
+
+        input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid #6c5ce7;
+        }
+
+        .btn {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #6c5ce7;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #5b4bc4;
+        }
+
+        .btn-logout {
+            background: #ff7675;
+            margin-top: 25px;
+            width: 100%;
+        }
+
+        .btn-logout:hover {
+            background: #d63031;
+        }
+
+        .switch-text {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #b3b3b3;
+        }
+
+        .switch-text span {
+            color: #a29bfe;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .switch-text span:hover {
+            text-decoration: underline;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-content p {
+            font-size: 14px;
+            color: #dcdde1;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .card-grid {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .card {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Container untuk Login & Register -->
+    <div class="container" id="auth-container">
+        
+        <!-- Form Login -->
+        <div class="form-box" id="login-box">
+            <h2>Selamat Datang</h2>
+            <p class="subtitle">Silakan login untuk melanjutkan</p>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="Alamat Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button type="submit" class="btn">Masuk</button>
+            </form>
+            <p class="switch-text">Belum punya akun? <span onclick="toggleForm()">Daftar di sini</span></p>
+        </div>
+
+        <!-- Form Register -->
+        <div class="form-box" id="register-box" style="display: none;">
+            <h2>Buat Akun Baru</h2>
+            <p class="subtitle">Daftarkan email dan password kamu</p>
+            <form id="register-form">
+                <input type="email" id="register-email" placeholder="Alamat Email" required>
+                <input type="password" id="register-password" placeholder="Password" required>
+                <button type="submit" class="btn">Daftar</button>
+            </form>
+            <p class="switch-text">Sudah punya akun? <span onclick="toggleForm()">Login di sini</span></p>
+        </div>
+    </div>
+
+    <!-- Halaman Dashboard (Isi Bebas Setelah Login) -->
+    <div class="container dashboard" id="dashboard-container" style="display: none;">
+        <h2>Halo, Selamat Datang! 🎉</h2>
+        <div class="dashboard-content">
+            <h3>Portal Dashboard Sistem Komputer</h3>
+            <p>Kamu berhasil masuk ke dalam sistem. Di sini kamu bisa mengakses modul pembelajaran, mengecek jadwal praktikum, dan mengelola project web atau IoT kamu.</p>
+            
+            <div class="card-grid">
+                <div class="card">Materi Kuliah</div>
+                <div class="card">Jadwal Praktikum</div>
+                <div class="card">Project Lab</div>
+            </div>
+        </div>
+        <button onclick="logout()" class="btn btn-logout">Logout</button>
+    </div>
+
+    <script>
+        // Mengambil elemen HTML
+        const loginBox = document.getElementById('login-box');
+        const registerBox = document.getElementById('register-box');
+        const authContainer = document.getElementById('auth-container');
+        const dashboardContainer = document.getElementById('dashboard-container');
+
+        // Fungsi untuk bolak-balik form Login dan Register
+        function toggleForm() {
+            if (loginBox.style.display === "none") {
+                loginBox.style.display = "block";
+                registerBox.style.display = "none";
+            } else {
+                loginBox.style.display = "none";
+                registerBox.style.display = "block";
+            }
+        }
+
+        // Menangani Form Register (Pendaftaran)
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Mencegah halaman reload
+            
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+
+            // Cek apakah email sudah terdaftar
+            if (localStorage.getItem(email)) {
+                alert("Email ini sudah terdaftar! Silakan login.");
+                return;
+            }
+
+            // Simpan email dan password ke Local Storage
+            localStorage.setItem(email, password);
+            alert("Akun berhasil dibuat! Silakan login.");
+            
+            // Kosongkan input dan kembali ke halaman login
+            document.getElementById('register-form').reset();
+            toggleForm();
+        });
+
+        // Menangani Form Login
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            // Mengambil password dari Local Storage berdasarkan email
+            const storedPassword = localStorage.getItem(email);
+
+            if (storedPassword === null) {
+                alert("Akun tidak ditemukan. Silakan daftar terlebih dahulu!");
+            } else if (storedPassword !== password) {
+                alert("Password salah! Coba lagi.");
+            } else {
+                // Jika login berhasil
+                authContainer.style.display = "none";
+                dashboardContainer.style.display = "block";
+                document.getElementById('login-form').reset();
+            }
+        });
+
+        // Fungsi untuk Logout
+        function logout() {
+            dashboardContainer.style.display = "none";
+            authContainer.style.display = "block";
+        }
+    </script>
+</body>
+</html>
 
